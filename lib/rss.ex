@@ -10,26 +10,30 @@ defmodule RSS do
     """
   end
 
-  def item(title, desc, pubDate, link, guid) do
+  def item(title, desc, pub_date, link, guid) do
     """
     <item>
-      <title>#{title}</title>
-      <description><![CDATA[#{desc}]]></description>
-      <pubDate>#{pubDate}</pubDate>
-      <link>#{link}</link>
-      <guid>#{guid}</guid>
+      #{element(:title, title)}
+      #{element(:description, desc)}
+      #{element(:pubDate, pub_date)}
+      #{element(:link, link)}
+      #{element(:guid, guid)}
     </item>
     """
   end
 
   def channel(title, link, desc, date, lang) do
     """
-      <title>#{title}</title>
-      <link>#{link}</link>
-      <description>#{desc}</description>
-      <lastBuildDate>#{date}</lastBuildDate>
-      <language>#{lang}</language>
+      #{element(:title, title)}
+      #{element(:link, link)}
+      #{element(:description, desc)}
+      #{element(:lastBuildDate, date)}
+      #{element(:language, lang)}
     """
   end
 
+  defp element(tag, text) do
+    text_chars = to_charlist(text)
+    :xmerl.export_simple_element({tag, [text_chars]}, :xmerl_xml)
+  end
 end
